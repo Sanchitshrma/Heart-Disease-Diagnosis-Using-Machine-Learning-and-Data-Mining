@@ -714,20 +714,3 @@ result_label.pack(pady=10)
 
 # Start the GUI loop
 window.mainloop()
-
-
-# ### References
-
-# Harris, C.R., Millman, K.J., van der Walt, S.J., et al. (2020). Array programming with NumPy. Nature, 585(7825), 357-362.
-# 
-# Hunter, J. D. (2007). Matplotlib: A 2D graphics environment. Computing in Science & Engineering, 9(3), 90-95.
-# 
-# Manu Siddhartha (2020). Heart Disease Dataset (Comprehensive). [online] IEEE DataPort. Available at: https://ieee-dataport.org/open-access/heart-disease-dataset-comprehensive [Accessed 1 Jan. 2024].
-# 
-# Pedregosa, F., Varoquaux, G., Gramfort, A., et al. (2011). Scikit-learn: Machine Learning in Python. Journal of Machine Learning Research, 12, 2825-2830.
-# 
-# Python Software Foundation.(n.d.). Tkinter - Python interface to Tcl/Tk [Software]. Available at: https://docs.python.org/3/library/tkinter.html [Accessed 1 June. 2024}
-# 
-# Python Software Foundation. (n.d.). joblib - Lightweight pipelining in Python [Software]. Available at: https://joblib.readthedocs.io/ [Accessed 5 June. 2024].
-# 
-# Waskom, M. L. (2021). seaborn: statistical data visualization. Journal of Open Source Software, 6(60), 3021.
