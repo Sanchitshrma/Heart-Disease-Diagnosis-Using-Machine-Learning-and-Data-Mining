@@ -1,6 +1,6 @@
 # Heart Disease Diagnosis Using Machine Learning and Data Mining
 
-This repository contains the code, notebook, trained model, dataset, and dissertation report for a final-year Data Analytics project on heart disease prediction. The project applies supervised machine learning techniques to clinical patient data and compares multiple classifiers to identify the most effective model for diagnosis support.
+This repository contains the code, notebook, trained model, dataset, and dissertation report for a third-year Data Analytics project on heart disease prediction. The project applies supervised machine learning techniques to clinical patient data and compares multiple classifiers to identify the most effective model for diagnosis support.
 
 ## Project Overview
 
