@@ -98,12 +98,12 @@ Feature importance is aggregated across the evaluated models. In the current imp
 
 The following results were reproduced from the current codebase using the same preprocessing logic, `random_state=0`, a 25% test split, and the selected ranked features:
 
-| Model | Test Accuracy | ROC-AUC | Mean 5-Fold CV Accuracy |
-| --- | ---: | ---: | ---: |
-| Decision Tree | 0.8725 | 0.8732 | 0.8576 |
-| Random Forest | 0.9497 | 0.9628 | 0.8980 |
-| Naive Bayes | 0.8591 | 0.9006 | 0.8318 |
-| Support Vector Machine | 0.8322 | 0.8823 | 0.8408 |
+| Model                  | Test Accuracy | ROC-AUC | Mean 5-Fold CV Accuracy |
+| ---------------------- | ------------: | ------: | ----------------------: |
+| Decision Tree          |        0.8725 |  0.8732 |                  0.8576 |
+| Random Forest          |        0.9497 |  0.9628 |                  0.8980 |
+| Naive Bayes            |        0.8591 |  0.9006 |                  0.8318 |
+| Support Vector Machine |        0.8322 |  0.8823 |                  0.8408 |
 
 ### Best Performing Model
 
@@ -177,6 +177,24 @@ This will:
 jupyter notebook "script/10892938 - Project_Code.ipynb"
 ```
 
+### 4. Run the Flask Web App
+
+```bash
+pip install -r requirements.txt
+python app.py
+```
+
+Then open http://127.0.0.1:5000 in your browser.
+
+### Using the Web App
+
+1. Open the page in your browser.
+2. Click "Load sample values" to populate the form with a working record.
+3. Press "Predict" to get a probability and risk summary.
+4. Change any value and run again to see how predictions change.
+
+> The app uses a Random Forest classifier trained on the local dataset, so it is meant for demonstration and screening only.
+
 ## Academic Value
 
 This project demonstrates core Data Analytics and machine learning skills, including:
@@ -195,11 +213,3 @@ This project demonstrates core Data Analytics and machine learning skills, inclu
 - Add model explainability with SHAP or LIME.
 - Build a web-based interface using Flask or Streamlit.
 - Add automated tests and a `requirements.txt` file for easier setup.
-
-## References
-
-- Siddhartha, M. (2020). *Heart Disease Dataset (Comprehensive)*. IEEE DataPort.
-- Harris, C. R. et al. (2020). *Array programming with NumPy*. Nature.
-- Pedregosa, F. et al. (2011). *Scikit-learn: Machine Learning in Python*. JMLR.
-- Hunter, J. D. (2007). *Matplotlib: A 2D graphics environment*.
-- Waskom, M. L. (2021). *seaborn: statistical data visualization*.
