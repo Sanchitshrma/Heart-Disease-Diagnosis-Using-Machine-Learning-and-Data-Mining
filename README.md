@@ -154,46 +154,76 @@ Heart-Disease-Diagnosis-using-Machine-Learning-and-Data-Mining/
 ### 1. Install Dependencies
 
 ```bash
-pip install numpy pandas matplotlib seaborn scikit-learn joblib jupyter
+pip install -r requirements.txt
 ```
 
-### 2. Run the Python Script
+### 2. Train the Flask Prediction Model
+
+```bash
+python train_model.py
+```
+
+This generates a trained pipeline at `model/heart_disease_pipeline.pkl`.
+
+### 3. Start the Flask Web App
+
+```bash
+python app.py
+```
+
+Open `http://127.0.0.1:5000` in your browser to use the web UI.
+
+### 4. Deploy to Render
+
+Render can build and serve the app automatically. Add the service on Render, then set the build command to:
+
+```bash
+python train_model.py
+```
+
+and the start command to:
+
+```bash
+gunicorn app:app --bind 0.0.0.0:$PORT
+```
+
+Render will use the generated `model/heart_disease_pipeline.pkl` when serving the app.
+
+### 4. Optional: Run the original analysis script
 
 ```bash
 python "script/10892938 - Project_Code.py"
 ```
 
-This will:
+This will still load and preprocess the dataset, train the Random Forest model, and launch the original Tkinter interface.
 
-- load and preprocess the dataset,
-- generate analysis plots,
-- train and evaluate the models,
-- save the Random Forest model, and
-- launch the Tkinter prediction interface.
+### 5. Project Structure for Flask Deployment
 
-### 3. Run the Notebook Version
-
-```bash
-jupyter notebook "script/10892938 - Project_Code.ipynb"
+```text
+Heart-Disease-Diagnosis-Using-Machine-Learning-and-Data-Mining/
+├── app.py
+├── train_model.py
+├── requirements.txt
+├── dataset/
+│   └── heart_statlog_cleveland_hungary_final.csv
+├── model/
+│   └── heart_disease_pipeline.pkl  # created after train_model.py runs
+├── static/
+│   └── style.css
+├── templates/
+│   └── index.html
+├── random_forest_model.pkl
+├── script/
+│   ├── 10892938 - Project_Code.ipynb
+│   └── 10892938 - Project_Code.py
+└── README.md
 ```
 
-### 4. Run the Flask Web App
+### Notes
 
-```bash
-pip install -r requirements.txt
-python app.py
-```
-
-Then open http://127.0.0.1:5000 in your browser.
-
-### Using the Web App
-
-1. Open the page in your browser.
-2. Click "Load sample values" to populate the form with a working record.
-3. Press "Predict" to get a probability and risk summary.
-4. Change any value and run again to see how predictions change.
-
-> The app uses a Random Forest classifier trained on the local dataset, so it is meant for demonstration and screening only.
+- The Flask app uses the same dataset and a `RandomForestClassifier` pipeline with `StandardScaler`.
+- The web UI is designed for screening only and should not replace clinical judgment.
+- For production, configure a secure `SECRET_KEY` and use a production WSGI server such as Gunicorn or uWSGI.
 
 ## Academic Value
 

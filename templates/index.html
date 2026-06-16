@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Heart Disease Risk Prediction</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="page-shell">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Heart Disease Risk Screening</p>
+        <h1>Clinical Prediction Interface</h1>
+        <p>Submit patient vitals and clinical measurements to evaluate heart disease risk using the trained Random Forest model.</p>
+      </div>
+      <div class="status-card">
+        <p>Model</p>
+        <strong>Random Forest + Auto Scaling</strong>
+      </div>
+    </section>
+
+    <section class="form-panel">
+      <div class="form-header">
+        <div>
+          <p class="section-label">Patient screening</p>
+          <h2>Clinical input form</h2>
+          <p class="section-copy">Complete the form with patient measurements and encoded values to receive a probability-based risk estimate.</p>
+        </div>
+      </div>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for category, message in messages %}
+              <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      {% if prediction %}
+        <article class="result-card {{ prediction.status }}">
+          <h2>{{ prediction.label }}</h2>
+          <p>{{ prediction.message }}</p>
+          <div class="result-grid">
+            <div>
+              <span>Estimated risk</span>
+              <strong>{{ prediction.risk }}</strong>
+            </div>
+            <div>
+              <span>Model confidence</span>
+              <strong>{{ prediction.confidence }}</strong>
+            </div>
+          </div>
+        </article>
+      {% endif %}
+
+      <form method="post" class="prediction-form" novalidate>
+        <div class="form-grid">
+          {% for field in fields %}
+            <label class="field-card">
+              <span>{{ field.label }}</span>
+              {% if field.type == 'select' %}
+                <select name="{{ field.key }}" required>
+                  <option value="">Choose an option</option>
+                  {% for label, value in field.choices %}
+                    <option value="{{ value }}" {% if form_data[field.key] == value|string %}selected{% endif %}>{{ label }}</option>
+                  {% endfor %}
+                </select>
+              {% else %}
+                <input
+                  type="number"
+                  name="{{ field.key }}"
+                  step="{{ field.step }}"
+                  placeholder="{{ field.placeholder }}"
+                  value="{{ form_data[field.key] }}"
+                  required
+                >
+              {% endif %}
+            </label>
+          {% endfor %}
+        </div>
+
+        <div class="button-row">
+          <button type="button" class="secondary-button" id="load-sample">Load Sample Data</button>
+          <button type="submit">Predict Risk</button>
+        </div>
+      </form>
+
+      <section class="info-panel">
+        <div class="info-row">
+          <div class="info-card">
+            <div class="info-card-title">Feature guidance</div>
+            <p class="info-copy">Click each item to view an expanded description of the clinical input fields used by the model.</p>
+            <details>
+              <summary>Age</summary>
+              <p>Patient age in years. This feature captures age-related risk because cardiovascular disease incidence tends to increase with older age.</p>
+            </details>
+            <details>
+              <summary>Sex</summary>
+              <p>Sex is encoded as 1 for male and 0 for female. The model uses this to account for observed differences in heart disease prevalence and symptom presentation.</p>
+            </details>
+            <details>
+              <summary>Chest Pain Type</summary>
+              <p>The type of chest pain experienced by the patient. Categories range from typical angina and atypical angina to non-anginal pain and asymptomatic presentation.</p>
+            </details>
+            <details>
+              <summary>Resting Blood Pressure</summary>
+              <p>Resting systolic blood pressure measured in mm Hg. High values may indicate hypertension, which is a significant cardiovascular risk factor.</p>
+            </details>
+            <details>
+              <summary>Cholesterol</summary>
+              <p>Serum cholesterol measured in mg/dL. Higher cholesterol is linked to plaque buildup in arteries and increased coronary risk.</p>
+            </details>
+            <details>
+              <summary>Fasting Blood Sugar</summary>
+              <p>Binary indicator for fasting blood sugar above 120 mg/dL. Elevated values suggest impaired glucose regulation, which is correlated with heart disease risk.</p>
+            </details>
+            <details>
+              <summary>Resting ECG</summary>
+              <p>Resting electrocardiogram result coded as normal, ST-T abnormality, or left ventricular hypertrophy. Abnormal ECG findings can signal underlying cardiac stress.</p>
+            </details>
+            <details>
+              <summary>Max Heart Rate</summary>
+              <p>Maximum heart rate achieved during exercise testing. Lower peak heart rate may indicate reduced cardiovascular fitness or blockages in coronary circulation.</p>
+            </details>
+            <details>
+              <summary>Exercise Induced Angina</summary>
+              <p>Whether chest pain occurred during exercise. This binary feature helps identify exertional ischemia, a key marker for coronary artery disease.</p>
+            </details>
+            <details>
+              <summary>Oldpeak</summary>
+              <p>ST depression induced by exercise relative to rest. Higher oldpeak values indicate greater stress on the heart during exercise.</p>
+            </details>
+            <details>
+              <summary>ST Slope</summary>
+              <p>Slope of the ST segment during peak exercise. Different slope patterns are associated with varying levels of cardiac risk.</p>
+            </details>
+          </div>
+
+          <div class="info-card">
+            <div class="info-card-title">FAQs</div>
+            <details>
+              <summary>Is this a medical diagnosis?</summary>
+              <p>No. This model provides a risk screening estimate only and should not replace professional medical advice or clinical evaluation.</p>
+            </details>
+            <details>
+              <summary>What does the risk score mean?</summary>
+              <p>The risk score is the probability that the model assigns to heart disease presence, based on the submitted clinical values.</p>
+            </details>
+            <details>
+              <summary>How should I prepare inputs?</summary>
+              <p>Provide the most recent clinical measurements available and select encoded categories according to the patient’s current status.</p>
+            </details>
+            <details>
+              <summary>Can I use this app in production?</summary>
+              <p>This interface is a demonstration. A production deployment should include model validation, clinical review, data security, and regulatory compliance.</p>
+            </details>
+            <details>
+              <summary>Why are these features included?</summary>
+              <p>The selected features are commonly used in heart disease prediction because they reflect established risk factors for coronary artery disease.</p>
+            </details>
+            <details>
+              <summary>How accurate is the model?</summary>
+              <p>The model is trained on the dataset included in this repository. Accuracy can vary with new patient populations and should be externally validated.</p>
+            </details>
+            <details>
+              <summary>What if a value is missing?</summary>
+              <p>All fields are required in this application. If a clinical measurement is unavailable, obtain the missing data before submitting the form.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+  <script>
+    const sampleData = {
+      age: '58',
+      sex: '1',
+      cp: '4',
+      trestbps: '140',
+      chol: '230',
+      fbs: '0',
+      restecg: '0',
+      thalach: '150',
+      exang: '0',
+      oldpeak: '1.2',
+      slope: '2'
+    };
+
+    const loadSampleButton = document.getElementById('load-sample');
+    if (loadSampleButton) {
+      loadSampleButton.addEventListener('click', () => {
+        Object.entries(sampleData).forEach(([key, value]) => {
+          const field = document.querySelector(`[name="${key}"]`);
+          if (field) {
+            field.value = value;
+          }
+        });
+      });
+    }
+  </script>
+</body>
+</html>
